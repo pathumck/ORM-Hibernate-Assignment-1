@@ -47,6 +47,51 @@ The @JoinColumn(name = "author_id") annotation in JPA is used to specify the nam
 that is associated with the owning side of the relationship.
 In the context of a one-to-many or many-to-one relationship, it's typically used on the owning side of the relationship.
 
+Q1:
+
+"SELECT id, price, pubYear, title FROM Book WHERE pubYear > ?1"
+
+Q2:
+
+"UPDATE Book b SET b.price = b.price * 1.1 WHERE b.author.id = ?1"
+
+Q3: 
+
+public static void deleteAuthorAndBooks(int authorId) {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        Author author = session.get(Author.class, authorId);
+        if (author != null) {
+            session.delete(author);
+        }
+        transaction.commit();
+        session.close();
+    }
+
+Q4:
+
+"SELECT AVG(b.price) FROM Book b"
+
+Q5:
+
+"SELECT a, COUNT(b) FROM Author a JOIN a.books b GROUP BY a.id"
+
+Q6:
+
+"SELECT b FROM Book b JOIN b.author a WHERE a.country = : country"
+
+Q7:
+
+@JoinColumn(name = "author_id"): 
+This annotation specifies the foreign key column that maps the association between the Book and Author entities. 
+The name attribute specifies the name of the foreign key column in the Book table.
+
+Q10:
+
+"SELECT a FROM Author a WHERE size(a.books) > (SELECT AVG(size(b.books)) FROM Author b)"
+
+
 
 
 
